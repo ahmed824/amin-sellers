@@ -3,21 +3,24 @@ import { Stack, Alert } from "@mui/material";
 import { useSearchPlayers } from "../hooks/useSearchPlayers";
 import { useGetPlayerById } from "../hooks/useGetPlayerById";
 import { useGetPlayerProfile } from "../hooks/useGetPlayerProfile";
-import { useTokenTransfer } from "../hooks/useTokenTransfer";
+import { useSendBoosters } from "../hooks/useSendBoosters";
 import RecipientInput from "../components/RecipientInput";
-import TokenTransfer from "../components/TokenTransfer";
-import JawakerOfferPurchase from "../components/JawakerOfferPurchase";
+import AcceleratorTransfer from "../components/AcceleratorTransfer";
 import PlayerDetailsModal from "../components/PlayerDetailsModal";
 
-function ShippingTransfers() {
+function AcceleratorTransfers() {
   const [recipientMode, setRecipientMode] = useState("id");
   const [searchName, setSearchName] = useState("");
   const [recipientId, setRecipientId] = useState("");
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [recipientError, setRecipientError] = useState("");
-  const [offerError, setOfferError] = useState("");
-  const [tokenError, setTokenError] = useState("");
-  const [tokenAmount, setTokenAmount] = useState("");
+  const [acceleratorError, setAcceleratorError] = useState("");
+  const [selectedAccelerator, setSelectedAccelerator] = useState("red");
+  const [acceleratorCounts, setAcceleratorCounts] = useState({
+    black: 0,
+    blue: 0,
+    red: 0,
+  });
   const [openModal, setOpenModal] = useState(false);
   const [modalPlayerId, setModalPlayerId] = useState(null);
   const [players, setPlayers] = useState([]);
@@ -39,13 +42,13 @@ function ShippingTransfers() {
     error: profileError,
   } = useGetPlayerProfile(modalPlayerId, openModal);
   const {
-    mutate: transferTokens,
-    isPending: isTransferring,
-    isSuccess: isTransferSuccess,
-    isError: isTransferError,
-    error: transferError,
-    reset: resetTransfer,
-  } = useTokenTransfer();
+    mutate: sendBoosters,
+    isPending: isSendingBoosters,
+    isSuccess: isBoostersSuccess,
+    isError: isBoostersError,
+    error: boostersError,
+    reset: resetBoosters,
+  } = useSendBoosters();
 
   useEffect(() => {
     if (searchedPlayers.length > 0 && !selectedPlayer) {
@@ -64,9 +67,9 @@ function ShippingTransfers() {
       setRecipientError(searchError.message || "خطأ في البحث عن اللاعبين");
     if (idError)
       setRecipientError(idError.message || "خطأ في جلب اللاعب بواسطة المعرف");
-    if (isTransferError)
-      setTokenError(transferError.message || "خطأ في نقل التوكنز");
-  }, [searchError, idError, isTransferError, transferError]);
+    if (isBoostersError)
+      setAcceleratorError(boostersError.message || "خطأ في إرسال المسرعات");
+  }, [searchError, idError, isBoostersError, boostersError]);
 
   const handleOpenModal = (player) => {
     setModalPlayerId(player.id);
@@ -80,7 +83,7 @@ function ShippingTransfers() {
 
   return (
     <Stack
-      className="transfer-page"
+      className="accelerator-transfer-page"
       spacing={3}
       alignItems="center"
       justifyContent="center"
@@ -113,42 +116,30 @@ function ShippingTransfers() {
         setPlayerById={setPlayerById}
         isFetchingId={isFetchingId}
         idError={idError}
-        resetTransfer={resetTransfer}
-        resetBoosters={() => {}} // Empty function since we don't have boosters here anymore
+        resetTransfer={resetBoosters}
+        resetBoosters={resetBoosters}
         setError={setRecipientError}
         handleOpenModal={handleOpenModal}
       />
-      {offerError && (
+      {acceleratorError && (
         <Alert severity="error" sx={{ width: 400, maxWidth: "95%" }}>
-          {offerError}
+          {acceleratorError}
         </Alert>
       )}
-      <JawakerOfferPurchase
+      <AcceleratorTransfer
+        selectedAccelerator={selectedAccelerator}
+        setSelectedAccelerator={setSelectedAccelerator}
+        acceleratorCounts={acceleratorCounts}
+        setAcceleratorCounts={setAcceleratorCounts}
         selectedPlayer={selectedPlayer}
         setSelectedPlayer={setSelectedPlayer}
-        setError={setOfferError}
-        setSearchName={setSearchName}
-        setRecipientId={setRecipientId}
-        setPlayers={setPlayers}
-        setPlayerById={setPlayerById}
-      />
-      {tokenError && (
-        <Alert severity="error" sx={{ width: 400, maxWidth: "95%" }}>
-          {tokenError}
-        </Alert>
-      )}
-      <TokenTransfer
-        tokenAmount={tokenAmount}
-        setTokenAmount={setTokenAmount}
-        selectedPlayer={selectedPlayer}
-        setSelectedPlayer={setSelectedPlayer}
-        setError={setTokenError}
-        transferTokens={transferTokens}
-        isTransferring={isTransferring}
-        isTransferSuccess={isTransferSuccess}
-        isTransferError={isTransferError}
-        transferError={transferError}
-        resetTransfer={resetTransfer}
+        setError={setAcceleratorError}
+        sendBoosters={sendBoosters}
+        isSendingBoosters={isSendingBoosters}
+        isBoostersSuccess={isBoostersSuccess}
+        isBoostersError={isBoostersError}
+        boostersError={boostersError}
+        resetBoosters={resetBoosters}
         setSearchName={setSearchName}
         setRecipientId={setRecipientId}
         setPlayers={setPlayers}
@@ -165,4 +156,4 @@ function ShippingTransfers() {
   );
 }
 
-export default ShippingTransfers;
+export default AcceleratorTransfers;
