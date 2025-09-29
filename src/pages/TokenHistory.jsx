@@ -33,6 +33,8 @@ function TokenHistory() {
     error: sellerError,
   } = useSellerProfile();
 
+  console.log("sellerData",sellerData)
+
   const { data, isLoading, isError, error } = useTokenTransfers({
     page,
     from: fromDate || undefined, // Use undefined to omit from query if empty

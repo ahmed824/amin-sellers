@@ -52,7 +52,7 @@ function DashboardModal({ isOpen, onClose, onLogout }) {
           <CloseIcon />
         </IconButton>
 
-        <Dashboard onLogout={onLogout} />
+        <Dashboard isModal={true} onLogout={onLogout} />
       </Box>
     </Modal>
   );

@@ -31,6 +31,7 @@ const fetchTokenTransfers = async ({ page = 1, from, to, on, q }) => {
   // Map API data to DataGrid rows
   const rows = data.data.data.map((transfer) => ({
     id: transfer.id,
+    recipient_id: transfer.recipient_id,
     recipient: transfer.recipient_name || transfer.recipient_id,
     amount: transfer.amount,
     type: transfer.type === "normal" ? "توكن" : transfer.type,

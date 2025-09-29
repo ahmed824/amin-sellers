@@ -1,7 +1,7 @@
-import Dashboard from '../components/Dashboard';
+import Dashboard from "../components/Dashboard";
 
-function DashboardPage({ onLogout }) {
-  return <Dashboard onLogout={onLogout} />;
+function DashboardPage({ onLogout, isModal }) {
+  return <Dashboard onLogout={onLogout} isModal="false" />;
 }
 
-export default DashboardPage; 
+export default DashboardPage;

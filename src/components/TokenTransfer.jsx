@@ -78,7 +78,7 @@ function TokenTransfer({
             />
             
             {/* Pricing Information */}
-            {tokenAmount > 0 && profile?.pricing?.group_pricing?.prices?.tokens_million && (
+            {/* {tokenAmount > 0 && profile?.pricing?.group_pricing?.prices?.tokens_million && (
                 <Paper elevation={1} sx={{ p: 2, mb: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
                     <Typography variant="body2" color="text.secondary" gutterBottom>
                         تفاصيل التسعير:
@@ -93,7 +93,7 @@ function TokenTransfer({
                         سعر المليون توكن: <strong>{profile.pricing.group_pricing.prices.tokens_million} {profile.pricing.group_pricing.currency}</strong>
                     </Typography>
                 </Paper>
-            )}
+            )} */}
             
             <Stack
                 direction="row"

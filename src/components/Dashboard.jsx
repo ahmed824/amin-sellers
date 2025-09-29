@@ -7,27 +7,25 @@ import {
   ListItemButton,
   ListItemText,
   Paper,
-  Avatar,
-  IconButton,
   Button,
   CircularProgress,
   Alert,
   Chip,
   Stack,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useLogout } from "../hooks/useLogout";
 import { useSellerProfile } from "../hooks/useSellerProfile";
 import { acceleratorTypes } from "../utils/acceleratorTypes";
 import InstallButton from "./InstallButton";
 
-function Dashboard({ onLogout }) {
+function Dashboard({ onLogout, isModal = false }) {
   const {
     logout,
     isPending: isLogoutPending,
     error: logoutError,
   } = useLogout();
+
   const {
     data: profile,
     isLoading: isProfileLoading,
@@ -63,18 +61,13 @@ function Dashboard({ onLogout }) {
           </Alert>
         ) : (
           <>
+            {/* Profile Info */}
             <Box
               display="flex"
               flexDirection="column"
               alignItems="center"
               mb={3}
             >
-              {/* <Box position="relative" display="inline-block">
-                <Avatar src={profile?.image || '/images/default-avatar.png'} sx={{ width: 80, height: 80, mb: 1 }} />
-                <IconButton size="small" sx={{ position: 'absolute', bottom: 8, right: 0, bgcolor: '#fff' }}>
-                  <EditIcon fontSize="small" />
-                </IconButton>
-              </Box> */}
               <Typography
                 variant="subtitle1"
                 fontWeight={600}
@@ -85,6 +78,8 @@ function Dashboard({ onLogout }) {
               >
                 اسم البائع : {profile?.name || "اسم المستخدم"}
               </Typography>
+
+              {/* Wallet and Pricing Info */}
               <Paper
                 elevation={2}
                 sx={{
@@ -109,6 +104,7 @@ function Dashboard({ onLogout }) {
                     {profile?.wallet?.currency}
                   </span>
                 </Typography>
+
                 {profile?.pricing?.group_pricing?.prices?.tokens_million && (
                   <Typography variant="body1" color="#bbb" mb={2}>
                     سعر المليون توكن:{" "}
@@ -118,6 +114,7 @@ function Dashboard({ onLogout }) {
                     </span>
                   </Typography>
                 )}
+
                 {profile?.pricing?.group_pricing?.prices && (
                   <>
                     <Typography variant="body2" color="#bbb" mb={1}>
@@ -172,11 +169,15 @@ function Dashboard({ onLogout }) {
                 )}
               </Paper>
             </Box>
+
+            {/* Logout error */}
             {logoutError && (
               <Alert severity="error" sx={{ mb: 2 }}>
                 {logoutError.message || "فشل في تسجيل الخروج"}
               </Alert>
             )}
+
+            {/* Links and actions */}
             {isLogoutPending ? (
               <CircularProgress
                 size={24}
@@ -184,34 +185,37 @@ function Dashboard({ onLogout }) {
               />
             ) : (
               <>
-                <List className="dashboard-lists">
-                  <ListItem disablePadding>
-                    <ListItemButton component={Link} to="/shipping-transfers">
-                      <ListItemText
-                        sx={{ color: "#fff" }}
-                        primary="الشحن والتحويلات"
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemButton component={Link} to="/token-balance">
-                      <ListItemText
-                        sx={{ color: "#fff" }}
-                        primary="سجل رصيد التوكنز"
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemButton component={Link} to="/boosters-balance">
-                      <ListItemText
-                        sx={{ color: "#fff" }}
-                        primary="سجل رصيد المسرعات"
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                </List>
+                {/* Only show links if not inside modal */}
+                {!isModal && (
+                  <List className="dashboard-lists">
+                    <ListItem disablePadding>
+                      <ListItemButton component={Link} to="/shipping-transfers">
+                        <ListItemText
+                          sx={{ color: "#fff" }}
+                          primary="الشحن والتحويلات"
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemButton component={Link} to="/token-balance">
+                        <ListItemText
+                          sx={{ color: "#fff" }}
+                          primary="سجل رصيد التوكنز"
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemButton component={Link} to="/boosters-balance">
+                        <ListItemText
+                          sx={{ color: "#fff" }}
+                          primary="سجل رصيد المسرعات"
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                  </List>
+                )}
 
-                {/* Install Button for Tablet/Mobile */}
+                {/* Install Button (always visible, modal or not) */}
                 <InstallButton showInSidebar={false} />
 
                 <Box mt={4} display="flex" justifyContent="center">

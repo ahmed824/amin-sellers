@@ -145,6 +145,9 @@ const TokenTransferBill = ({ transfer, isBooster = false }) => {
   const statusText =
     transfer.status.toLowerCase() === "done" ? "Completed" : "Fail";
 
+  // Label depending on type
+  const amountLabel = isBooster ? "Boosters" : "Tokens";
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -163,18 +166,24 @@ const TokenTransferBill = ({ transfer, isBooster = false }) => {
           </Text>
         </View>
 
-        <View style={styles.section}>
+        {/* Recipient + ID */}
+         <View style={styles.section}>
           <Text style={styles.label}>Recipient</Text>
-          <Text style={styles.value}>{transfer.recipient}</Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.label}>Amount</Text>
           <Text style={styles.value}>
-            {Number(transfer.amount).toLocaleString()}
+            {transfer.recipient}
+            {transfer.recipient_id ? ` (ID: ${transfer.recipient_id})` : ""}
           </Text>
         </View>
 
+        {/* Amount */}
+        <View style={styles.section}>
+          <Text style={styles.label}>Amount</Text>
+          <Text style={styles.value}>
+            {Number(transfer.amount).toLocaleString()} {amountLabel}
+          </Text>
+        </View>
+
+        {/* Booster Type if booster */}
         {isBooster && (
           <View style={styles.section}>
             <Text style={styles.label}>Booster Type</Text>
@@ -184,11 +193,13 @@ const TokenTransferBill = ({ transfer, isBooster = false }) => {
           </View>
         )}
 
+        {/* Date */}
         <View style={styles.section}>
           <Text style={styles.label}>Date</Text>
           <Text style={styles.value}>{transfer.date}</Text>
         </View>
 
+        {/* Time */}
         <View style={styles.section}>
           <Text style={styles.label}>Time</Text>
           <Text style={styles.value}>{transfer.time}</Text>

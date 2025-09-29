@@ -1,12 +1,28 @@
-import { Box, Button, Typography, Paper } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { useSellerProfile } from "../../hooks/useSellerProfile";
 
-function AcceleratorCounter({ selectedAccelerator, acceleratorCounts, updateAcceleratorCount }) {
+function AcceleratorCounter({
+  selectedAccelerator,
+  acceleratorCounts,
+  updateAcceleratorCount,
+}) {
   const { data: profile } = useSellerProfile();
   const priceKey = `booster_${selectedAccelerator}`;
   const unitPrice = profile?.pricing?.group_pricing?.prices?.[priceKey];
   const currency = profile?.pricing?.group_pricing?.currency;
-  const totalPrice = unitPrice ? unitPrice * acceleratorCounts[selectedAccelerator] : 0;
+  const totalPrice = unitPrice
+    ? unitPrice * acceleratorCounts[selectedAccelerator]
+    : 0;
+
+  const handleManualChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    if (!isNaN(value) && value >= 0) {
+      updateAcceleratorCount(
+        selectedAccelerator,
+        value - acceleratorCounts[selectedAccelerator]
+      );
+    }
+  };
 
   return (
     <Box sx={{ mb: 2 }}>
@@ -18,6 +34,7 @@ function AcceleratorCounter({ selectedAccelerator, acceleratorCounts, updateAcce
         mb={2}
         sx={{ flexDirection: "row-reverse" }}
       >
+        {/* Minus Button */}
         <Button
           variant="outlined"
           sx={{
@@ -32,23 +49,37 @@ function AcceleratorCounter({ selectedAccelerator, acceleratorCounts, updateAcce
         >
           -
         </Button>
-        <Box
+
+        {/* Editable Input */}
+        <TextField
+          value={acceleratorCounts[selectedAccelerator]}
+          onChange={handleManualChange}
+          type="number"
+          inputProps={{
+            min: 0,
+            style: {
+              textAlign: "center",
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#fff",
+            },
+          }}
           sx={{
             width: 80,
             height: 48,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            bgcolor: "#18171d",
-            border: "2px solid #a71d2a",
-            borderRadius: 2,
-            color: "#fff",
-            fontSize: "24px",
-            fontWeight: "bold",
+            "& .MuiInputBase-root": {
+              bgcolor: "#18171d",
+              borderRadius: 2,
+              border: "2px solid #a71d2a",
+              height: "100%",
+            },
+            "& input": {
+              padding: 0,
+            },
           }}
-        >
-          {acceleratorCounts[selectedAccelerator]}
-        </Box>
+        />
+
+        {/* Plus Button */}
         <Button
           variant="outlined"
           sx={{
@@ -64,24 +95,6 @@ function AcceleratorCounter({ selectedAccelerator, acceleratorCounts, updateAcce
           +
         </Button>
       </Box>
-      
-      {/* Pricing Information */}
-      {acceleratorCounts[selectedAccelerator] > 0 && unitPrice && currency && (
-        <Paper elevation={1} sx={{ p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
-          <Typography variant="body2" color="text.secondary" gutterBottom>
-            تفاصيل التسعير:
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 1 }}>
-            الكمية: <strong>{acceleratorCounts[selectedAccelerator]} مسرع</strong>
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 1 }}>
-            السعر للوحدة: <strong>{unitPrice} {currency}</strong>
-          </Typography>
-          <Typography variant="body2">
-            السعر الإجمالي: <strong>{totalPrice.toFixed(2)} {currency}</strong>
-          </Typography>
-        </Paper>
-      )}
     </Box>
   );
 }
