@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   logo: {
-    width: 60,
+    width: "auto",
     height: 60,
     marginBottom: 10,
   },
@@ -158,7 +158,7 @@ const TokenTransferBill = ({ transfer, isBooster = false }) => {
 
         {/* Logo + Title */}
         <View style={styles.headerContainer}>
-          <Image src="/android-chrome-192x192.png" style={styles.logo} />
+          <Image src="/src/assets/amin1.jpeg" style={styles.logo} />
           <Text style={styles.headerTitle}>
             {isBooster
               ? "Jawaker Booster Transfer Invoice"
