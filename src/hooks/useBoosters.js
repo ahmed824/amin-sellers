@@ -42,6 +42,7 @@ const fetchBoosters = async ({ page = 1, from, to }) => {
     const rows = data.data.history.data.map((booster) => ({
       id: booster.id,
       recipient: booster?.recipient_name || booster?.recipient_id,
+      recipient_public_id: booster?.recipient_public_id || null,
       amount: booster.amount,
       type:
         booster.booster_type === "red"

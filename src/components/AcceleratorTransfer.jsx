@@ -12,6 +12,8 @@ function AcceleratorTransfer({
   setAcceleratorCounts,
   selectedPlayer,
   setSelectedPlayer,
+  recipientMode,
+  recipientId,
   setError,
   sendBoosters,
   isSendingBoosters,
@@ -37,9 +39,25 @@ function AcceleratorTransfer({
       elevation={4}
       sx={{ p: 3, width: 400, maxWidth: "95%", mt: 2, direction: "rtl" }}
     >
-      <Typography variant="subtitle1" mb={1} sx={{ textAlign: "right" }}>
-        تحويل مسرعات{" "}
-        <RocketLaunchIcon sx={{ verticalAlign: "middle", color: "#e53935" }} />
+      <Typography
+        variant="subtitle1"
+        mb={1}
+        sx={{
+          textAlign: "right",
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <div>
+          تحويل مسرعات{" "}
+          <RocketLaunchIcon sx={{ verticalAlign: "middle", color: "#e53935" }} />
+        </div>
+        <div>
+          رصيد المحفظة:{" "}
+          <span style={{ color: "#00e676", fontWeight: 700 }}>
+            {Number(profile?.wallet?.balance).toLocaleString()} {profile?.wallet?.currency}
+          </span>
+        </div>
       </Typography>
       <AcceleratorSelector
         selectedAccelerator={selectedAccelerator}
@@ -61,10 +79,15 @@ function AcceleratorTransfer({
         setPlayerById={setPlayerById}
         setError={setError}
         transferData={{
-          recipientId: selectedPlayer?.id,
+          recipient_id: selectedPlayer?.id,
+          ...(recipientMode === "id" && recipientId
+            ? { recipient_public_id: recipientId }
+            : {}),
+          ...(selectedPlayer?.username
+            ? { recipient_name: selectedPlayer.username }
+            : {}),
           type: selectedAccelerator,
           amount: acceleratorCounts[selectedAccelerator],
-          note: "",
         }}
         transferFn={sendBoosters}
         isTransferring={isSendingBoosters}

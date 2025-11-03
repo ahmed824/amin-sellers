@@ -1,11 +1,13 @@
-import { Box, Typography, AppBar, Toolbar, Avatar, IconButton, Badge, Button } from '@mui/material';
+import { Box, Typography, AppBar, Toolbar, IconButton, Badge, Button } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { useUnreadNotificationsCount } from '../hooks/useNotifications';
 import DashboardModal from './shared/DashboardModal';
 import { useState } from 'react';
+import { useSellerProfile } from '../hooks/useSellerProfile';
 
 function TopBar({ title, userName, handleLogout, handleOpenNotifications, style }) {
+  const { data: profile } = useSellerProfile();
   const { data: unreadCount = 0, isLoading: isUnreadLoading } = useUnreadNotificationsCount();
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const handleDashboardClick = () => {
@@ -30,11 +32,13 @@ function TopBar({ title, userName, handleLogout, handleOpenNotifications, style 
               <NotificationsActiveIcon sx={{ color: '#fff' }} />
             </Badge>
           </IconButton>
-          <Button onClick={handleDashboardClick} style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Button onClick={handleDashboardClick} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <Typography variant="body1" sx={{ color: '#fff' }}>
               المستخدم: {userName}
             </Typography>
-            {/* <Avatar src={userImage} sx={{ width: 32, height: 32 }} />  */}
+            <Typography variant="body2" sx={{ color: '#00e676', fontWeight: 700 }}>
+              {Number(profile?.wallet?.balance).toLocaleString()} {profile?.wallet?.currency}
+            </Typography>
           </Button>
           {/* Dashboard Modal for mobile/tablet */}
           <DashboardModal

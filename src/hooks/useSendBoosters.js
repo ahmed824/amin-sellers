@@ -2,13 +2,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { baseUrl } from "../baseUrl";
 import { getAuthToken } from "../utils/token";
 
-const sendBoosters = async ({ recipientId, type, amount, note }) => {
+const sendBoosters = async (payload) => {
+  const { recipient_id, recipient_public_id, recipientId, type, amount } = payload || {};
   const token = getAuthToken();
   if (!token) throw new Error("Authentication token is missing or invalid");
 
-  if (!recipientId || !type || !amount || amount <= 0) {
+  const hasRecipient = Boolean(recipient_public_id || recipient_id || recipientId);
+  if (!hasRecipient || !type || !amount || amount <= 0) {
     throw new Error(
-      "Invalid input: recipientId, type, and a positive amount are required"
+      "Invalid input: recipient (id or public_id), type, and positive amount are required"
     );
   }
 
@@ -19,10 +21,11 @@ const sendBoosters = async ({ recipientId, type, amount, note }) => {
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
-      recipient_id: String(recipientId),
+      ...(recipient_public_id
+        ? { recipient_public_id: String(recipient_public_id) }
+        : { recipient_id: String(recipient_id || recipientId) }),
       type,
-      amount,
-      note: note || "",
+      amount
     }),
   });
 

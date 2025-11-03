@@ -17,7 +17,7 @@ Font.register({
 const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
-    padding: 30,
+    padding: "20 25",
     fontFamily: "NotoSansArabic",
     fontSize: 12,
     backgroundColor: "#f8fafc",
@@ -69,6 +69,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
   },
+  sectionColumn: {
+    marginBottom: 12,
+    padding: "10 15",
+    border: "1 solid #e5e7eb",
+    borderRadius: 8,
+    backgroundColor: "#ffffff",
+    display: "flex",
+    flexDirection: "column",
+    gap: 6,
+    boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+    width: "100%",
+  },
   label: {
     fontSize: 12,
     fontWeight: 600,
@@ -78,6 +90,34 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 500,
     color: "#059669",
+  },
+  rowBetween: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: 10,
+    width: "100%",
+    minHeight: 20,
+  },
+  labelBox: {
+    width: 90,
+    flexShrink: 0,
+  },
+  valueBox: {
+    flex: 1,
+    minWidth: 200,
+    flexWrap: "wrap",
+    textAlign: "right",
+  },
+  valueText: {
+    fontSize: 12,
+    fontWeight: 500,
+    color: "#059669",
+    flexWrap: "wrap",
+    wordWrap: "break-word",
+    textAlign: "right",
+    direction: "rtl",
   },
   boosterValueRed: {
     color: "#dc2626",
@@ -166,13 +206,30 @@ const TokenTransferBill = ({ transfer, isBooster = false }) => {
           </Text>
         </View>
 
-        {/* Recipient + ID */}
-         <View style={styles.section}>
-          <Text style={styles.label}>Recipient</Text>
-          <Text style={styles.value}>
-            {transfer.recipient}
-            {transfer.recipient_id ? ` (ID: ${transfer.recipient_id})` : ""}
-          </Text>
+        {/* Recipient + Public ID on separate rows */}
+        <View style={styles.sectionColumn}>
+          <View style={styles.rowBetween}>
+            <View style={styles.labelBox}>
+              <Text style={styles.label}>Recipient</Text>
+            </View>
+            <View style={styles.valueBox}>
+              <Text style={styles.valueText} wrap>
+                {transfer.recipient}
+              </Text>
+            </View>
+          </View>
+          {transfer.recipient_public_id ? (
+            <View style={styles.rowBetween}>
+              <View style={styles.labelBox}>
+                <Text style={styles.label}>Public ID</Text>
+              </View>
+              <View style={styles.valueBox}>
+                <Text style={styles.valueText} wrap>
+                  {transfer.recipient_public_id}
+                </Text>
+              </View>
+            </View>
+          ) : null}
         </View>
 
         {/* Amount */}

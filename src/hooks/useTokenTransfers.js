@@ -33,6 +33,7 @@ const fetchTokenTransfers = async ({ page = 1, from, to, on, q }) => {
     id: transfer.id,
     recipient_id: transfer.recipient_id,
     recipient: transfer.recipient_name || transfer.recipient_id,
+    recipient_public_id: transfer.recipient_public_id || null,
     amount: transfer.amount,
     type: transfer.type === "normal" ? "توكن" : transfer.type,
     status: transfer.status === "done" ? "Done" : "Failed",

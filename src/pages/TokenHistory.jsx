@@ -167,6 +167,7 @@ function TokenHistory() {
             rowsPerPageOptions={[pagination.per_page]}
             disableRowSelectionOnClick
             autoHeight
+            getRowHeight={() => 'auto'}
             getRowClassName={(params) =>
               params.row.status === "failed" ? "Mui-error-row" : ""
             }
@@ -174,6 +175,12 @@ function TokenHistory() {
               bgcolor: "#2a2a34",
               color: "#fff",
               direction: "rtl",
+              "& .MuiDataGrid-cell": {
+                alignItems: "flex-start",
+                whiteSpace: "normal",
+                lineHeight: 1.2,
+                py: 1,
+              },
               "& .MuiDataGrid-columnHeaders": {
                 bgcolor: "transparent", // Transparent background for all headers
                 color: "#fff", // White text for all headers

@@ -2,9 +2,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { baseUrl } from "../baseUrl";
 import { getAuthToken } from "../utils/token";
 
-const tokenTransfer = async ({ recipient_id, amount, note }) => {
-  if (!recipient_id || !amount || !note) {
-    throw new Error("All fields are required: recipient_id, amount, and note");
+const tokenTransfer = async (payload) => {
+  const { recipient_id, recipient_public_id, recipient_name, amount } =
+    payload || {};
+  if (!recipient_id || !amount) {
+    throw new Error("Required fields: recipient_id and amount");
   }
   if (isNaN(amount) || amount <= 0) {
     throw new Error("Amount must be a positive number");
@@ -18,8 +20,11 @@ const tokenTransfer = async ({ recipient_id, amount, note }) => {
     },
     body: JSON.stringify({
       recipient_id: String(recipient_id),
+      ...(recipient_public_id
+        ? { recipient_public_id: String(recipient_public_id) }
+        : {}),
+      ...(recipient_name ? { recipient_name: String(recipient_name) } : {}),
       amount: parseInt(amount, 10),
-      note,
     }),
   });
 

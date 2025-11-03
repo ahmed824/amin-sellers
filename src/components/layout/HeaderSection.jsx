@@ -15,7 +15,6 @@ function HeaderSection({
       <TopBar
         title={title}
         userName={userData.name}
-        userImage={userData.image}
         handleLogout={handleLogout}
         handleOpenNotifications={handleOpen}
         style={style}

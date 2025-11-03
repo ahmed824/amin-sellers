@@ -142,6 +142,8 @@ function ShippingTransfers() {
         setTokenAmount={setTokenAmount}
         selectedPlayer={selectedPlayer}
         setSelectedPlayer={setSelectedPlayer}
+        recipientMode={recipientMode}
+        recipientId={recipientId}
         setError={setTokenError}
         transferTokens={transferTokens}
         isTransferring={isTransferring}

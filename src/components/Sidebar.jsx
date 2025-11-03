@@ -9,12 +9,9 @@ import {
   Toolbar,
   Typography,
   Divider,
-  Avatar,
-  IconButton,
   Button,
   useMediaQuery,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { useTheme } from "@mui/material/styles";
@@ -22,10 +19,12 @@ import BottomNavItem from "./BottomNavItem";
 import DashboardModal from "./shared/DashboardModal";
 import InstallButton from "./InstallButton";
 import { useState, useEffect } from "react";
+import { useSellerProfile } from "../hooks/useSellerProfile";
 
 const drawerWidth = 220;
 
-function Sidebar({ tab, setTab, pages, handleLogout, userName, userImage }) {
+function Sidebar({ tab, setTab, pages, handleLogout, userName }) {
+  const { data: profile } = useSellerProfile();
   const theme = useTheme();
   const isTabletOrMobile = useMediaQuery(theme.breakpoints.down("md")); // md = 960px
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
@@ -76,20 +75,6 @@ function Sidebar({ tab, setTab, pages, handleLogout, userName, userImage }) {
               alignItems="center"
               mb={2}
             >
-              <Box position="relative" display="inline-block">
-                <Avatar src={userImage} sx={{ width: 72, height: 72, mb: 1 }} />
-                <IconButton
-                  size="small"
-                  sx={{
-                    position: "absolute",
-                    bottom: 8,
-                    right: 0,
-                    bgcolor: "#fff",
-                  }}
-                >
-                  <EditIcon fontSize="small" />
-                </IconButton>
-              </Box>
               <Typography
                 variant="subtitle1"
                 fontWeight={600}
@@ -99,6 +84,13 @@ function Sidebar({ tab, setTab, pages, handleLogout, userName, userImage }) {
               >
                 {userName}
               </Typography>
+            <Typography
+              variant="body2"
+              sx={{ color: "#00e676", fontWeight: 700 }}
+              align="center"
+            >
+              {Number(profile?.wallet?.balance).toLocaleString()} {profile?.wallet?.currency}
+            </Typography>
             </Box>
 
             <Divider />

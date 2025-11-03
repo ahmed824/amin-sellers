@@ -20,6 +20,8 @@ function TokenTransfer({
     setTokenAmount,
     selectedPlayer,
     setSelectedPlayer,
+    recipientMode,
+    recipientId,
     setError,
     transferTokens,
     isTransferring,
@@ -135,8 +137,13 @@ function TokenTransfer({
                 setError={setError}
                 transferData={{
                     recipient_id: selectedPlayer?.id,
+                    ...(recipientMode === "id" && recipientId
+                        ? { recipient_public_id: recipientId }
+                        : {}),
+                    ...(selectedPlayer?.username
+                        ? { recipient_name: selectedPlayer.username }
+                        : {}),
                     amount: parseInt(tokenAmount),
-                    note: "تحويل تجريبي",
                 }}
                 transferFn={transferTokens}
                 isTransferring={isTransferring}

@@ -9,6 +9,16 @@ export const getTokenColumns = (sellerName) => [
     flex: 2,
     headerAlign: "left",
     align: "left",
+    renderCell: (params) => (
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <span style={{ fontWeight: 600 }}>{params.value}</span>
+        {params.row?.recipient_public_id && (
+          <span style={{ color: "#90caf9", fontSize: "0.8rem" }}>
+            {params.row.recipient_public_id}
+          </span>
+        )}
+      </div>
+    ),
   },
   {
     field: "amount",
@@ -62,6 +72,16 @@ export const getBoosterColumns = (sellerName) => [
     flex: 2,
     headerAlign: "left",
     align: "left",
+    renderCell: (params) => (
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <span style={{ fontWeight: 600 }}>{params.value}</span>
+        {params.row?.recipient_public_id && (
+          <span style={{ color: "#90caf9", fontSize: "0.8rem" }}>
+            {params.row.recipient_public_id}
+          </span>
+        )}
+      </div>
+    ),
   },
   {
     field: "amount",

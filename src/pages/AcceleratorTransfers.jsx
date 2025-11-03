@@ -133,6 +133,8 @@ function AcceleratorTransfers() {
         setAcceleratorCounts={setAcceleratorCounts}
         selectedPlayer={selectedPlayer}
         setSelectedPlayer={setSelectedPlayer}
+        recipientMode={recipientMode}
+        recipientId={recipientId}
         setError={setAcceleratorError}
         sendBoosters={sendBoosters}
         isSendingBoosters={isSendingBoosters}
