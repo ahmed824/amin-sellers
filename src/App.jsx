@@ -12,6 +12,11 @@ import Dashboard from "./pages/Dashboard";
 import MainLayout from "./components/MainLayout";
 import BoostersBalance from "./pages/BoostersBalance";
 import TokenBalance from "./pages/TokenBalance";
+import CategoriesPage from "./pages/multi-provider/CategoriesPage";
+import ProductsPage from "./pages/multi-provider/ProductsPage";
+import CreateOrderPage from "./pages/multi-provider/CreateOrderPage";
+import OrderHistoryPage from "./pages/multi-provider/OrderHistoryPage";
+import OrderDetailsPage from "./pages/multi-provider/OrderDetailsPage";
 
 import { getAuthToken, removeAuthToken } from "./utils/token";
 
@@ -162,6 +167,102 @@ function App() {
             element={
               isLoggedIn ? (
                 <TokenBalance />
+              ) : (
+                <LoginPage onLogin={handleLogin} />
+              )
+            }
+          />
+          {/* Multi-Provider Routes */}
+          <Route
+            path="/multi-provider"
+            element={
+              isLoggedIn ? (
+                <MainLayout
+                  tab={tab}
+                  setTab={setTab}
+                  pages={pages}
+                  handleLogout={handleLogout}
+                  handleOpenNotifications={handleOpenNotifications}
+                  title="الفئات"
+                >
+                  <CategoriesPage />
+                </MainLayout>
+              ) : (
+                <LoginPage onLogin={handleLogin} />
+              )
+            }
+          />
+          <Route
+            path="/multi-provider/category/:categoryId"
+            element={
+              isLoggedIn ? (
+                <MainLayout
+                  tab={tab}
+                  setTab={setTab}
+                  pages={pages}
+                  handleLogout={handleLogout}
+                  handleOpenNotifications={handleOpenNotifications}
+                  title="المنتجات"
+                >
+                  <ProductsPage />
+                </MainLayout>
+              ) : (
+                <LoginPage onLogin={handleLogin} />
+              )
+            }
+          />
+          <Route
+            path="/multi-provider/product/:productId/order"
+            element={
+              isLoggedIn ? (
+                <MainLayout
+                  tab={tab}
+                  setTab={setTab}
+                  pages={pages}
+                  handleLogout={handleLogout}
+                  handleOpenNotifications={handleOpenNotifications}
+                  title="إنشاء طلب"
+                >
+                  <CreateOrderPage />
+                </MainLayout>
+              ) : (
+                <LoginPage onLogin={handleLogin} />
+              )
+            }
+          />
+          <Route
+            path="/multi-provider/orders"
+            element={
+              isLoggedIn ? (
+                <MainLayout
+                  tab={tab}
+                  setTab={setTab}
+                  pages={pages}
+                  handleLogout={handleLogout}
+                  handleOpenNotifications={handleOpenNotifications}
+                  title="سجل الطلبات"
+                >
+                  <OrderHistoryPage />
+                </MainLayout>
+              ) : (
+                <LoginPage onLogin={handleLogin} />
+              )
+            }
+          />
+          <Route
+            path="/multi-provider/orders/:id"
+            element={
+              isLoggedIn ? (
+                <MainLayout
+                  tab={tab}
+                  setTab={setTab}
+                  pages={pages}
+                  handleLogout={handleLogout}
+                  handleOpenNotifications={handleOpenNotifications}
+                  title="تفاصيل الطلب"
+                >
+                  <OrderDetailsPage />
+                </MainLayout>
               ) : (
                 <LoginPage onLogin={handleLogin} />
               )

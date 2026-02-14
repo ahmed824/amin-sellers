@@ -14,7 +14,10 @@ import {
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import HistoryIcon from "@mui/icons-material/History";
 import { useTheme } from "@mui/material/styles";
+import { useNavigate, useLocation } from "react-router-dom";
 import BottomNavItem from "./BottomNavItem";
 import DashboardModal from "./shared/DashboardModal";
 import InstallButton from "./InstallButton";
@@ -26,8 +29,12 @@ const drawerWidth = 220;
 function Sidebar({ tab, setTab, pages, handleLogout, userName }) {
   const { data: profile } = useSellerProfile();
   const theme = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
   const isTabletOrMobile = useMediaQuery(theme.breakpoints.down("md")); // md = 960px
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
+  
+  const isMultiProviderActive = location.pathname.startsWith("/multi-provider");
 
   const handleDashboardClick = () => {
     setIsDashboardOpen(true);
@@ -109,6 +116,33 @@ function Sidebar({ tab, setTab, pages, handleLogout, userName }) {
                   </ListItemButton>
                 </ListItem>
               ))}
+            </List>
+
+            <Divider sx={{ my: 2 }} />
+
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton
+                  selected={isMultiProviderActive && location.pathname === "/multi-provider"}
+                  onClick={() => navigate("/multi-provider")}
+                >
+                  <ListItemIcon sx={{ minWidth: "auto", mr: 1 }}>
+                    <ShoppingCartIcon sx={{ color: "#fff" }} />
+                  </ListItemIcon>
+                  <ListItemText primary="المنتجات المتعددة" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton
+                  selected={location.pathname === "/multi-provider/orders"}
+                  onClick={() => navigate("/multi-provider/orders")}
+                >
+                  <ListItemIcon sx={{ minWidth: "auto", mr: 1 }}>
+                    <HistoryIcon sx={{ color: "#fff" }} />
+                  </ListItemIcon>
+                  <ListItemText primary="سجل الطلبات" />
+                </ListItemButton>
+              </ListItem>
             </List>
           </Box>
 
