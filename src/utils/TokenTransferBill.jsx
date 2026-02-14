@@ -187,6 +187,11 @@ const TokenTransferBill = ({ transfer, isBooster = false }) => {
 
   // Label depending on type
   const amountLabel = isBooster ? "Boosters" : "Tokens";
+  const transferTypeLabel = isBooster
+    ? "Booster"
+    : transfer?.type_raw === "offer"
+      ? "Offer"
+      : "Token";
 
   return (
     <Document>
@@ -208,6 +213,16 @@ const TokenTransferBill = ({ transfer, isBooster = false }) => {
 
         {/* Recipient + Public ID on separate rows */}
         <View style={styles.sectionColumn}>
+          <View style={styles.rowBetween}>
+            <View style={styles.labelBox}>
+              <Text style={styles.label}>Type</Text>
+            </View>
+            <View style={styles.valueBox}>
+              <Text style={styles.valueText} wrap>
+                {transferTypeLabel}
+              </Text>
+            </View>
+          </View>
           <View style={styles.rowBetween}>
             <View style={styles.labelBox}>
               <Text style={styles.label}>Recipient</Text>

@@ -36,6 +36,7 @@ const fetchJawakerOffers = async (page = 1) => {
       id: offer.id,
       external_offer_id: offer.external_offer_id,
       description: offer.description,
+      image: offer.image || null,
       seller_price: offer.seller_price,
       max_per_user: offer.max_per_user,
       ends_at: offer.ends_at, // Keep raw date string

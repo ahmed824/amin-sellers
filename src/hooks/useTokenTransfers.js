@@ -29,13 +29,17 @@ const fetchTokenTransfers = async ({ page = 1, from, to, on, q }) => {
   const data = await response.json();
 
   // Map API data to DataGrid rows
-  const rows = data.data.data.map((transfer) => ({
+  const rows = data.data.data.map((transfer) => {
+    const typeRaw = transfer.type || "normal";
+    const typeLabel = typeRaw === "offer" ? "عرض" : "توكن";
+    return ({
     id: transfer.id,
     recipient_id: transfer.recipient_id,
     recipient: transfer.recipient_name || transfer.recipient_id,
     recipient_public_id: transfer.recipient_public_id || null,
     amount: transfer.amount,
-    type: transfer.type === "normal" ? "توكن" : transfer.type,
+    type: typeLabel,
+    type_raw: typeRaw,
     status: transfer.status === "done" ? "Done" : "Failed",
     date: new Date(transfer.created_at).toLocaleDateString("ar-EG", {
       year: "numeric",
@@ -46,7 +50,7 @@ const fetchTokenTransfers = async ({ page = 1, from, to, on, q }) => {
       hour: "2-digit",
       minute: "2-digit",
     }),
-  }));
+  })});
 
   return {
     rows,

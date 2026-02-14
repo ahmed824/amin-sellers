@@ -33,6 +33,33 @@ export const getTokenColumns = (sellerName) => [
     ),
   },
   {
+    field: "type",
+    headerName: "النوع",
+    flex: 1,
+    headerAlign: "left",
+    align: "left",
+    renderCell: (params) => {
+      const isOffer = params.row?.type_raw === "offer";
+      const bg = isOffer ? "#ede7f6" : "#e8f5e9";
+      const color = isOffer ? "#5e35b1" : "#1b5e20";
+      return (
+        <span
+          style={{
+            background: bg,
+            color,
+            padding: "2px 8px",
+            borderRadius: 12,
+            fontSize: "0.8rem",
+            fontWeight: 600,
+            display: "inline-block",
+          }}
+        >
+          {params.value}
+        </span>
+      );
+    },
+  },
+  {
     field: "time",
     headerName: "الوقت",
     flex: 1,
