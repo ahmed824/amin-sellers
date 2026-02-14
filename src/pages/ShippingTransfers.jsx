@@ -118,20 +118,6 @@ function ShippingTransfers() {
         setError={setRecipientError}
         handleOpenModal={handleOpenModal}
       />
-      {offerError && (
-        <Alert severity="error" sx={{ width: 400, maxWidth: "95%" }}>
-          {offerError}
-        </Alert>
-      )}
-      <JawakerOfferPurchase
-        selectedPlayer={selectedPlayer}
-        setSelectedPlayer={setSelectedPlayer}
-        setError={setOfferError}
-        setSearchName={setSearchName}
-        setRecipientId={setRecipientId}
-        setPlayers={setPlayers}
-        setPlayerById={setPlayerById}
-      />
       {tokenError && (
         <Alert severity="error" sx={{ width: 400, maxWidth: "95%" }}>
           {tokenError}
@@ -151,6 +137,20 @@ function ShippingTransfers() {
         isTransferError={isTransferError}
         transferError={transferError}
         resetTransfer={resetTransfer}
+        setSearchName={setSearchName}
+        setRecipientId={setRecipientId}
+        setPlayers={setPlayers}
+        setPlayerById={setPlayerById}
+      />
+      {offerError && (
+        <Alert severity="error" sx={{ width: 400, maxWidth: "95%" }}>
+          {offerError}
+        </Alert>
+      )}
+      <JawakerOfferPurchase
+        selectedPlayer={selectedPlayer}
+        setSelectedPlayer={setSelectedPlayer}
+        setError={setOfferError}
         setSearchName={setSearchName}
         setRecipientId={setRecipientId}
         setPlayers={setPlayers}

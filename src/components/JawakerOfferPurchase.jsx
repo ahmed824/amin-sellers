@@ -140,29 +140,46 @@ const JawakerOfferPurchase = ({
                 />
 
                 <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography variant="body1" gutterBottom color="text.primary">
+                  <Typography
+                    variant="body1"
+                    gutterBottom
+                    sx={{ color: "#e0e0e0" }}
+                  >
                     {offer.description}
                   </Typography>
 
                   <Divider sx={{ my: 1 }} />
 
                   <Typography variant="h6" color="success.main" gutterBottom>
-                    السعر: {offer.seller_price.toLocaleString()} توكنز
+                    {offer.seller_price.toLocaleString()} توكنز
+                    {offer.seller_price_money
+                      ? ` = ${offer.seller_price_money}${offer.currency ? ` ${offer.currency}` : ""}`
+                      : ""}
                   </Typography>
 
-                  {offer.max_per_user && (
-                    <Chip
-                      label={`الحد: ${offer.max_per_user}`}
-                      color="secondary"
-                      variant="outlined"
-                      sx={{ mb: 1 }}
-                    />
-                  )}
-
-                  {formattedDate && (
-                    <Typography variant="body2" color="error.main">
-                      ينتهي في: {formattedDate}
-                    </Typography>
+                  {(offer.max_per_user || formattedDate) && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        flexWrap: "wrap",
+                        mt: 1,
+                      }}
+                    >
+                      {offer.max_per_user && (
+                        <Chip
+                          label={`الحد: ${offer.max_per_user}`}
+                          color="secondary"
+                          variant="outlined"
+                        />
+                      )}
+                      {formattedDate && (
+                        <Typography variant="body2" color="error.main">
+                          ينتهي في: {formattedDate}
+                        </Typography>
+                      )}
+                    </Box>
                   )}
                 </CardContent>
 
