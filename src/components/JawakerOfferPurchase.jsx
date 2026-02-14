@@ -12,9 +12,15 @@ import {
   Divider,
   Chip,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
+import { toast } from "react-toastify";
 import { usePurchaseJawakerOffer } from "../hooks/usePurchaseJawakerOffer";
 import { useJawakerOffers } from "../hooks/useJawakerOffers";
 
@@ -35,35 +41,52 @@ const JawakerOfferPurchase = ({
   const {
     mutate: purchaseOffer,
     isPending: isPurchasing,
-    isSuccess: isPurchaseSuccess,
     isError: isPurchaseError,
     error: purchaseError,
     reset: resetPurchase,
   } = usePurchaseJawakerOffer();
+  const [purchasingOfferId, setPurchasingOfferId] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmOffer, setConfirmOffer] = useState(null);
 
-  const handlePurchase = (offerId) => {
+  const handlePurchase = (offer) => {
     if (!selectedPlayer) {
       setError("يرجى اختيار لاعب أولاً");
       return;
     }
 
+    setConfirmOffer(offer);
+    setConfirmOpen(true);
+  };
+
+  const handleConfirm = () => {
+    if (!confirmOffer) return;
+
+    setConfirmOpen(false);
+    setPurchasingOfferId(confirmOffer.external_offer_id);
     purchaseOffer(
       {
         recipient_id: selectedPlayer.id,
-        external_offer_id: offerId,
+        external_offer_id: confirmOffer.external_offer_id,
       },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           setSelectedPlayer(null);
           setSearchName("");
           setRecipientId("");
           setPlayers([]);
           setPlayerById([]);
-          resetPurchase();
           setError(""); // Clear error on success
+          toast.success(data?.message || "تم شراء العرض بنجاح");
+          resetPurchase();
         },
         onError: (err) => {
-          setError(err.message || "فشل في شراء العرض");
+          const msg = err.message || "فشل في شراء العرض";
+          setError(msg);
+          toast.error(msg);
+        },
+        onSettled: () => {
+          setPurchasingOfferId(null);
         },
       }
     );
@@ -109,12 +132,6 @@ const JawakerOfferPurchase = ({
           {purchaseError.message || "خطأ في شراء العرض"}
         </Alert>
       )}
-      {isPurchaseSuccess && (
-        <Alert severity="success" sx={{ mb: 2 }}>
-          تم شراء العرض بنجاح
-        </Alert>
-      )}
-
       {/* Offers */}
       <Grid container spacing={2}>
         {offersData?.rows?.map((offer) => {
@@ -187,11 +204,18 @@ const JawakerOfferPurchase = ({
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handlePurchase(offer.external_offer_id)}
+                    onClick={() => handlePurchase(offer)}
                     disabled={isPurchasing || !selectedPlayer}
                     fullWidth
+                    startIcon={
+                      isPurchasing && purchasingOfferId === offer.external_offer_id ? (
+                        <CircularProgress size={16} color="inherit" />
+                      ) : null
+                    }
                   >
-                    {isPurchasing ? "جاري الشراء..." : "شراء العرض"}
+                    {isPurchasing && purchasingOfferId === offer.external_offer_id
+                      ? "جاري الشراء..."
+                      : "شراء العرض"}
                   </Button>
                 </Box>
               </Card>
@@ -199,6 +223,78 @@ const JawakerOfferPurchase = ({
           );
         })}
       </Grid>
+
+      <Dialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        dir="rtl"
+        sx={{
+          "& .MuiDialog-paper": {
+            backgroundColor: "#1e1e1e",
+            borderRadius: "12px",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.5)",
+            width: "90%",
+            maxWidth: "420px",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            textAlign: "right",
+            color: "#ffffff",
+            fontWeight: "bold",
+            fontSize: "1.1rem",
+            backgroundColor: "#a71d2a",
+            py: 1.5,
+          }}
+        >
+          تأكيد شراء العرض
+        </DialogTitle>
+        <DialogContent sx={{ pt: 2 }}>
+          <DialogContentText
+            sx={{
+              textAlign: "right",
+              color: "#e0e0e0",
+              fontSize: "0.95rem",
+              mb: 1,
+              mt: 1,
+            }}
+          >
+            هل أنت متأكد من إرسال العرض إلى{" "}
+            <strong>{selectedPlayer?.username || "اللاعب"}</strong>؟
+          </DialogContentText>
+          {confirmOffer && (
+            <Box sx={{ mt: 1, color: "#cfd8dc", fontSize: "0.9rem" }}>
+              <div>{confirmOffer.description}</div>
+              <div style={{ marginTop: 6, color: "#b9f6ca" }}>
+                {confirmOffer.seller_price?.toLocaleString()} توكنز
+                {confirmOffer.seller_price_money
+                  ? ` = ${confirmOffer.seller_price_money}${
+                      confirmOffer.currency ? ` ${confirmOffer.currency}` : ""
+                    }`
+                  : ""}
+              </div>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button
+            variant="outlined"
+            onClick={() => setConfirmOpen(false)}
+            sx={{ color: "#fff", borderColor: "#555" }}
+          >
+            إلغاء
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleConfirm}
+            disabled={isPurchasing}
+          >
+            موافق
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 };
