@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useEffect, useMemo } from "react";
 import { toast } from "react-toastify";
 import Sidebar from "./Sidebar";
@@ -8,7 +8,7 @@ import LoadingOverlay from "./layout/LoadingOverlay";
 import { useSellerProfile } from "../hooks/useSellerProfile";
 import { useNotifications } from "./layout/useNotifications";
 
-function MainLayout({ tab, setTab, pages, handleLogout, handleOpenNotifications }) {
+function MainLayout({ tab, setTab, pages, handleLogout, handleOpenNotifications, children, title }) {
   const {
     data: profile,
     isLoading: isProfileLoading,
@@ -56,14 +56,16 @@ function MainLayout({ tab, setTab, pages, handleLogout, handleOpenNotifications 
       />
       <Box component="main" sx={{ flexGrow: 1, bgcolor: "transparent" }}>
         <HeaderSection
-          title={pages[tab]?.label || "لوحة التحكم"}
+          title={title || pages[tab]?.label || "لوحة التحكم"}
           userData={userData}
           handleLogout={handleLogout}
           openNotifications={openNotifications}
           handleOpen={handleOpen}
           handleClose={handleClose}
         />
-        <ContentSection>{pages[tab]?.component || <Typography>الصفحة غير متوفرة</Typography>}</ContentSection>
+        <ContentSection>
+          {children || pages[tab]?.component || <Typography>الصفحة غير متوفرة</Typography>}
+        </ContentSection>
       </Box>
     </Box>
   );
