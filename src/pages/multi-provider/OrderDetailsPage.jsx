@@ -205,7 +205,7 @@ function OrderDetailsPage() {
                 الفئة
               </Typography>
               <Typography variant="body1" sx={{ color: "#fff" }}>
-                {order.product_variant?.product?.category?.name || "-"}
+                {order.product?.category?.name || order.product_variant?.product?.category?.name || "-"}
               </Typography>
             </Grid>
             <Grid item xs={12} md={4}>
@@ -213,15 +213,15 @@ function OrderDetailsPage() {
                 المنتج
               </Typography>
               <Typography variant="body1" sx={{ color: "#fff" }}>
-                {order.product_variant?.product?.name || "-"}
+                {order.product?.name || order.product_variant?.product?.name || "-"}
               </Typography>
             </Grid>
             <Grid item xs={12} md={4}>
               <Typography variant="body2" sx={{ color: "#aaa", mb: 0.5 }}>
-                المتغير
+                المنتج القديم
               </Typography>
               <Typography variant="body1" sx={{ color: "#fff" }}>
-                {order.product_variant?.name || "-"}
+                {order.product ? "-" : order.product_variant?.name || "-"}
               </Typography>
             </Grid>
           </Grid>
@@ -440,4 +440,3 @@ function OrderDetailsPage() {
 }
 
 export default OrderDetailsPage;
-

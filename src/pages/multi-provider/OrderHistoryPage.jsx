@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Paper,
   CircularProgress,
   Alert,
   Stack,
@@ -171,24 +170,16 @@ function OrderHistoryPage() {
       sx={{
         minHeight: "100vh",
         bgcolor: "transparent",
-        pt: 4,
+        pt: 3,
+        pb: 3,
         direction: "rtl",
-        px: 2,
+        px: { xs: 2, md: 3 },
       }}
     >
-      <Paper
-        elevation={4}
-        sx={{
-          p: 3,
-          width: "100%",
-          maxWidth: 1400,
-          mx: "auto",
-          bgcolor: "#23222a",
-        }}
-      >
+      <Box sx={{ width: "100%" }}>
         <Typography
           variant="h4"
-          sx={{ color: "#fff", mb: 3, textAlign: "center", fontWeight: 700 }}
+          sx={{ color: "#fff", mb: 3, fontWeight: 800 }}
         >
           سجل الطلبات
         </Typography>
@@ -262,7 +253,13 @@ function OrderHistoryPage() {
 
         {/* Orders Table */}
         <TableContainer
-          sx={{ maxHeight: 600, bgcolor: "#2d2d35", borderRadius: 1 }}
+          sx={{
+            maxHeight: "calc(100vh - 250px)",
+            bgcolor: "#2d2d35",
+            border: "1px solid #3d3d45",
+            borderRadius: 1,
+            width: "100%",
+          }}
         >
           <Table stickyHeader sx={{ minWidth: 1200 }}>
             <TableHead>
@@ -298,7 +295,7 @@ function OrderHistoryPage() {
                     textAlign: "right",
                   }}
                 >
-                  المتغير
+                  المنتج القديم
                 </TableCell>
                 <TableCell
                   sx={{
@@ -433,10 +430,10 @@ function OrderHistoryPage() {
                       {order.order_number || "-"}
                     </TableCell>
                     <TableCell sx={{ textAlign: "right" }}>
-                      {order.product_variant?.product?.name || "-"}
+                      {order.product?.name || order.product_variant?.product?.name || "-"}
                     </TableCell>
                     <TableCell sx={{ textAlign: "right" }}>
-                      {order.product_variant?.name || "-"}
+                      {order.product ? "-" : order.product_variant?.name || "-"}
                     </TableCell>
                     <TableCell sx={{ textAlign: "right" }}>
                       {order.quantity || 0}
@@ -517,7 +514,7 @@ function OrderHistoryPage() {
             />
           </Box>
         )}
-      </Paper>
+      </Box>
     </Stack>
   );
 }

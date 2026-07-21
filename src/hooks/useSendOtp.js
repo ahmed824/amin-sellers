@@ -1,13 +1,15 @@
 import { useMutation } from '@tanstack/react-query';
 import { baseUrl } from '../baseUrl';  
+import { normalizePhone } from '../utils/phone';
 
 const sendOtp = async (mobile) => {
+  const phone = normalizePhone(mobile);
   const response = await fetch(`${baseUrl}/seller/send-otp`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ phone: mobile }),
+    body: JSON.stringify({ phone }),
   });
 
   if (!response.ok) {

@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { baseUrl } from '../baseUrl';
-import { getAuthToken } from '../utils/token';
+import { getAuthToken, removeAuthToken } from '../utils/token';
 
 const logout = async () => {
   const token = getAuthToken();
@@ -10,7 +9,7 @@ const logout = async () => {
     throw new Error('لم يتم العثور على رمز التوثيق. الرجاء تسجيل الدخول مرة أخرى.');
   }
 
-  const response = await fetch(`${baseUrl}/seller/token-transfers`, {
+  const response = await fetch(`${baseUrl}/seller/logout`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -35,9 +34,9 @@ export function useLogout() {
     mutationKey: ['logout'],
     mutationFn: logout,
     onSuccess: () => {
-      Cookies.remove('authToken'); // Clear token
-      queryClient.clear(); // Clear query cache
-      navigate('/login'); // Redirect to login page
+      removeAuthToken();
+      queryClient.clear();
+      navigate('/login');
     },
     onError: (error) => {
       console.error('Logout error:', error.message);

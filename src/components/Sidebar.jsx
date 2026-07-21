@@ -35,6 +35,7 @@ function Sidebar({ tab, setTab, pages, handleLogout, userName }) {
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   
   const isMultiProviderActive = location.pathname.startsWith("/multi-provider");
+  const isMultiProviderOrdersActive = location.pathname.startsWith("/multi-provider/orders");
 
   const handleDashboardClick = () => {
     setIsDashboardOpen(true);
@@ -42,6 +43,11 @@ function Sidebar({ tab, setTab, pages, handleLogout, userName }) {
 
   const handleCloseDashboard = () => {
     setIsDashboardOpen(false);
+  };
+
+  const handlePageClick = (idx) => {
+    setTab(idx);
+    navigate("/");
   };
 
   return (
@@ -106,8 +112,8 @@ function Sidebar({ tab, setTab, pages, handleLogout, userName }) {
               {pages.map((page, idx) => (
                 <ListItem key={page.label} disablePadding>
                   <ListItemButton
-                    selected={tab === idx}
-                    onClick={() => setTab(idx)}
+                    selected={!isMultiProviderActive && location.pathname === "/" && tab === idx}
+                    onClick={() => handlePageClick(idx)}
                   >
                     <ListItemIcon sx={{ minWidth: "auto", mr: 1 }}>
                       {page.icon}
@@ -123,7 +129,7 @@ function Sidebar({ tab, setTab, pages, handleLogout, userName }) {
             <List>
               <ListItem disablePadding>
                 <ListItemButton
-                  selected={isMultiProviderActive && location.pathname === "/multi-provider"}
+                  selected={isMultiProviderActive && !isMultiProviderOrdersActive}
                   onClick={() => navigate("/multi-provider")}
                 >
                   <ListItemIcon sx={{ minWidth: "auto", mr: 1 }}>
@@ -134,7 +140,7 @@ function Sidebar({ tab, setTab, pages, handleLogout, userName }) {
               </ListItem>
               <ListItem disablePadding>
                 <ListItemButton
-                  selected={location.pathname === "/multi-provider/orders"}
+                  selected={isMultiProviderOrdersActive}
                   onClick={() => navigate("/multi-provider/orders")}
                 >
                   <ListItemIcon sx={{ minWidth: "auto", mr: 1 }}>
@@ -188,8 +194,8 @@ function Sidebar({ tab, setTab, pages, handleLogout, userName }) {
               icon={page.icon}
               label={page.label}
               value={idx}
-              isSelected={tab === idx}
-              onClick={setTab}
+              isSelected={!isMultiProviderActive && location.pathname === "/" && tab === idx}
+              onClick={handlePageClick}
             />
           ))}
           <BottomNavItem

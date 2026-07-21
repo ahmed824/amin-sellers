@@ -1,6 +1,7 @@
 import { TextField, Button, Typography, Alert } from '@mui/material';
 import PhoneIcon from '@mui/icons-material/Phone';
 import CircularProgress from '@mui/material/CircularProgress';
+import { normalizePhone } from '../utils/phone';
 
 function LoginForm({ mobile, setMobile, error, onSubmit, isLoading }) {
   return (
@@ -15,7 +16,8 @@ function LoginForm({ mobile, setMobile, error, onSubmit, isLoading }) {
           label="رقم الجوال"
           placeholder="05xxxxxxxxx"
           value={mobile}
-          onChange={e => setMobile(e.target.value)}
+          onChange={(e) => setMobile(e.target.value)}
+          onBlur={(e) => setMobile(normalizePhone(e.target.value))}
           required
           margin="normal"
           className="login-input"

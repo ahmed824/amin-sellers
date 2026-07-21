@@ -26,7 +26,7 @@ const fetchVariants = async (productId) => {
     if (response.status === 401) {
       throw new Error("رمز التوثيق غير صالح. الرجاء تسجيل الدخول مرة أخرى.");
     }
-    throw new Error(errorData.message || "فشل في جلب المتغيرات");
+    throw new Error(errorData.message || "فشل في جلب المنتج");
   }
 
   const data = await response.json();
@@ -42,4 +42,3 @@ export const useVariants = (productId, enabled = true) => {
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   });
 };
-

@@ -1,4 +1,4 @@
-import { Paper, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { useSearchLogic } from "../hooks/useSearchLogic";
 import SearchModeToggle from "./RecipientSearch/SearchModeToggle";
@@ -27,6 +27,7 @@ function RecipientInput({
   resetBoosters,
   setError,
   handleOpenModal,
+  embedded = false,
 }) {
   const {
     handleModeChange,
@@ -38,6 +39,7 @@ function RecipientInput({
     setRecipientMode,
     setSearchName,
     setRecipientId,
+    selectedPlayer,
     setSelectedPlayer,
     setPlayers,
     setPlayerById,
@@ -56,10 +58,17 @@ function RecipientInput({
     ? "أدخل معرف اللاعب"
     : "أدخل اسم اللاعب (حرفين على الأقل)";
 
+  const Container = embedded ? Box : Paper;
+
   return (
-    <Paper
-      elevation={4}
-      sx={{ p: 3, width: 400, maxWidth: "95%", direction: "rtl" }}
+    <Container
+      elevation={embedded ? undefined : 4}
+      sx={{
+        p: embedded ? 0 : 3,
+        width: embedded ? "100%" : 400,
+        maxWidth: embedded ? "100%" : "95%",
+        direction: "rtl",
+      }}
     >
       <Typography variant="subtitle1" mb={1} sx={{ textAlign: "right" }}>
         المستلم{" "}
@@ -91,7 +100,7 @@ function RecipientInput({
       />
 
       <SelectedPlayerInfo selectedPlayer={selectedPlayer} />
-    </Paper>
+    </Container>
   );
 }
 

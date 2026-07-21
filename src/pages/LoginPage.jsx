@@ -4,6 +4,7 @@ import { useVerifyOtp } from '../hooks/useVerifyOtp';
 import LoginForm from '../components/LoginForm';
 import OtpForm from '../components/OtpForm';
 import LoginLayout from '../components/LoginLayout';
+import { normalizePhone } from '../utils/phone';
 
 function LoginPage({ onLogin }) {
   const [mobile, setMobile] = useState('');
@@ -16,12 +17,15 @@ function LoginPage({ onLogin }) {
 
   const handleMobileSubmit = (e) => {
     e.preventDefault();
-    if (!/^\d{10,15}$/.test(mobile)) {
+    const cleanMobile = normalizePhone(mobile);
+    setMobile(cleanMobile);
+
+    if (!/^\d{10,15}$/.test(cleanMobile)) {
       setError('يرجى إدخال رقم جوال صحيح');
       return;
     }
 
-    sendOtp(mobile, {
+    sendOtp(cleanMobile, {
       onSuccess: () => {
         setError('');
         setShowOtp(true);
@@ -34,10 +38,13 @@ function LoginPage({ onLogin }) {
 
   const handleOtpSubmit = (e) => {
     e.preventDefault();
-    verifyOtp({ mobile, otp }, {
+    const cleanMobile = normalizePhone(mobile);
+    setMobile(cleanMobile);
+
+    verifyOtp({ mobile: cleanMobile, otp }, {
       onSuccess: () => {
         setError('');
-        onLogin(mobile, otp);
+        onLogin(cleanMobile, otp);
       },
       onError: (error) => {
         setError(error.message || 'حدث خطأ أثناء التحقق من رمز التحقق');

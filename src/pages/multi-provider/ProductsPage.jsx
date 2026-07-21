@@ -136,8 +136,8 @@ function ProductsPage() {
                         {product.description}
                       </Typography>
                     )}
-                    <Typography variant="body2" sx={{ color: "#00e676" }}>
-                      {product.variants_count || 0} متغير متاح
+                    <Typography variant="body2" sx={{ color: "#00e676", fontWeight: 700 }}>
+                      {product.pricing_summary || (product.price !== undefined ? `$${Number(product.price).toFixed(2)}` : "منتج متاح")}
                     </Typography>
                   </CardContent>
                 </Card>
@@ -157,4 +157,3 @@ function ProductsPage() {
 }
 
 export default ProductsPage;
-

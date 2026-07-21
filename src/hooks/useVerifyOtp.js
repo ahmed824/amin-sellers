@@ -1,14 +1,16 @@
 import { useMutation } from '@tanstack/react-query';
 import { setAuthToken } from "../utils/token"
 import { baseUrl } from '../baseUrl';
+import { normalizePhone } from '../utils/phone';
 
 const verifyOtp = async ({ mobile, otp }) => {
+  const phone = normalizePhone(mobile);
   const response = await fetch(`${baseUrl}/seller/verify-otp`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ phone: mobile, otp }),
+    body: JSON.stringify({ phone, otp }),
   });
 
   if (!response.ok) {

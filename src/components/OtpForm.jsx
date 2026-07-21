@@ -1,6 +1,7 @@
 import { TextField, Button, Typography, Alert, CircularProgress } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
 import PhoneIcon from '@mui/icons-material/Phone';
+import { normalizePhone } from '../utils/phone';
 
 function OtpForm({ mobile, setMobile, otp, setOtp, error, onSubmit, onBack, isLoading }) {
   const handleSubmit = (e) => {
@@ -32,6 +33,7 @@ function OtpForm({ mobile, setMobile, otp, setOtp, error, onSubmit, onBack, isLo
           placeholder="05xxxxxxxxx"
           value={mobile}
           onChange={(e) => setMobile(e.target.value)}
+          onBlur={(e) => setMobile(normalizePhone(e.target.value))}
           required
           margin="normal"
           className="login-input"

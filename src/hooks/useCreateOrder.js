@@ -21,10 +21,10 @@ const createOrder = async (orderData) => {
   const data = await response.json();
 
   if (!response.ok) {
-    const errorMessage =
-      data.message || data.errors
-        ? Object.values(data.errors || {}).flat().join(", ")
-        : "فشل في إنشاء الطلب";
+    const validationMessage = data.errors
+      ? Object.values(data.errors).flat().join(", ")
+      : null;
+    const errorMessage = validationMessage || data.message || "فشل في إنشاء الطلب";
     throw new Error(errorMessage);
   }
 
@@ -46,4 +46,3 @@ export const useCreateOrder = () => {
     },
   });
 };
-

@@ -2,14 +2,14 @@ import { useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
-  Paper,
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
   CircularProgress,
   Alert,
   Stack,
+  Chip,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
 } from "@mui/material";
 import { useCategories } from "../../hooks/useCategories";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -39,6 +39,19 @@ function CategoriesPage() {
     navigate(`/multi-provider/category/${categoryId}`);
   };
 
+  const groups = (categories || []).map((group) => {
+    if (Array.isArray(group.categories)) {
+      return group;
+    }
+
+    return {
+      id: "legacy",
+      name: "التصنيفات",
+      products_count: categories.reduce((sum, category) => sum + (category.products_count || 0), 0),
+      categories,
+    };
+  });
+
   return (
     <Stack
       sx={{
@@ -46,76 +59,110 @@ function CategoriesPage() {
         bgcolor: "transparent",
         pt: 4,
         direction: "rtl",
-        px: 2,
+        px: { xs: 2, md: 4 },
       }}
     >
-      <Paper
-        elevation={4}
-        sx={{ p: 3, width: "100%", maxWidth: 1200, mx: "auto", bgcolor: "#23222a" }}
-      >
-        <Typography
-          variant="h4"
-          sx={{ color: "#fff", mb: 3, textAlign: "center", fontWeight: 700 }}
-        >
-          الفئات
-        </Typography>
-
-        {categories && categories.length > 0 ? (
-          <Grid container spacing={3}>
-            {categories.map((category) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={category.id}>
-                <Card
+      <Box sx={{ width: "100%", maxWidth: 1200, mx: "auto" }}>
+        {groups && groups.length > 0 ? (
+          <Stack spacing={6}>
+            {groups.map((group) => (
+              <Box key={group.id ?? group.slug}>
+                <Box
                   sx={{
-                    cursor: "pointer",
-                    transition: "transform 0.2s",
-                    "&:hover": {
-                      transform: "translateY(-4px)",
-                      boxShadow: 6,
-                    },
-                    bgcolor: "#2d2d35",
-                    color: "#fff",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    textAlign: "center",
+                    mb: 3,
                   }}
-                  onClick={() => handleCategoryClick(category.id)}
                 >
-                  <CardMedia
-                    sx={{
-                      height: 140,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      bgcolor: "#3d3d45",
-                    }}
-                  >
-                    {category.icon_image_url ? (
-                      <img
-                        src={category.icon_image_url}
-                        alt={category.name}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                      />
-                    ) : (
-                      <CategoryIcon sx={{ fontSize: 60, color: "#00e676" }} />
-                    )}
-                  </CardMedia>
-                  <CardContent>
-                    <Typography
-                      variant="h6"
-                      component="div"
-                      sx={{ fontWeight: 600, mb: 1 }}
+                  {group.icon_url && (
+                    <Box
+                      component="img"
+                      src={group.icon_url}
+                      alt={group.name}
+                      sx={{
+                        width: 84,
+                        height: 84,
+                        objectFit: "cover",
+                        borderRadius: 3,
+                        border: "1px solid #3d3d45",
+                        mb: 1.5,
+                      }}
+                    />
+                  )}
+                  <Typography variant="h5" sx={{ color: "#fff", fontWeight: 800 }}>
+                    {group.name}
+                  </Typography>
+                  <Chip
+                    label={`${group.categories_count || group.categories?.length || 0} تصنيف - ${group.products_count || 0} منتج`}
+                    size="small"
+                    sx={{ mt: 1, bgcolor: "#1d3b2a", color: "#00e676", fontWeight: 700 }}
+                  />
+                </Box>
+
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: {
+                      xs: "repeat(2, minmax(0, 1fr))",
+                      sm: "repeat(3, minmax(0, 1fr))",
+                      md: "repeat(4, minmax(0, 1fr))",
+                      lg: "repeat(5, minmax(0, 1fr))",
+                    },
+                    gap: 2,
+                  }}
+                >
+                  {(group.categories || []).map((category) => (
+                    <Card
+                      key={category.id}
+                      sx={{
+                        bgcolor: "#2d2d35",
+                        color: "#fff",
+                        border: "1px solid #3d3d45",
+                        transition: "transform 0.2s, border-color 0.2s",
+                        "&:hover": {
+                          transform: "translateY(-4px)",
+                          borderColor: "#00e676",
+                        },
+                      }}
                     >
-                      {category.name}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: "#aaa" }}>
-                      {category.products_count || 0} منتج
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
+                      <CardActionArea onClick={() => handleCategoryClick(category.id)}>
+                        <CardMedia
+                          sx={{
+                            height: 120,
+                            bgcolor: "#202028",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {category.icon_image_url ? (
+                            <Box
+                              component="img"
+                              src={category.icon_image_url}
+                              alt={category.name}
+                              sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            />
+                          ) : (
+                            <CategoryIcon fontSize="small" />
+                          )}
+                        </CardMedia>
+                        <CardContent sx={{ textAlign: "center", minHeight: 86 }}>
+                          <Typography sx={{ color: "#fff", fontWeight: 700, mb: 0.5 }} noWrap>
+                            {category.name}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: "#aaa" }}>
+                            {category.products_count || 0} منتج
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  ))}
+                </Box>
+              </Box>
             ))}
-          </Grid>
+          </Stack>
         ) : (
           <Box sx={{ textAlign: "center", py: 4 }}>
             <Typography variant="h6" sx={{ color: "#fff" }}>
@@ -123,10 +170,9 @@ function CategoriesPage() {
             </Typography>
           </Box>
         )}
-      </Paper>
+      </Box>
     </Stack>
   );
 }
 
 export default CategoriesPage;
-
