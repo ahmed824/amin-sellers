@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Typography } from "@mui/material";
 
 import LoginPage from "./pages/LoginPage";
-import ShippingTransfers from "./pages/ShippingTransfers";
 import AcceleratorTransfers from "./pages/AcceleratorTransfers";
 import TokenHistory from "./pages/TokenHistory";
 import AcceleratorHistory from "./pages/AcceleratorHistory";
@@ -20,7 +19,6 @@ import OrderDetailsPage from "./pages/multi-provider/OrderDetailsPage";
 
 import { getAuthToken, removeAuthToken } from "./utils/token";
 
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
@@ -28,12 +26,6 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 const queryClient = new QueryClient();
 
 const pages = [
-  {
-    label: "الشحن والتحويلات",
-    icon: <AccountBalanceWalletIcon sx={{ color: "#fff" }} />,
-    component: <ShippingTransfers />,
-    path: "/shipping-transfers",
-  },
   {
     label: "تحويل المسرعات",
     icon: <RocketLaunchIcon sx={{ color: "#fff" }} />,
@@ -107,16 +99,6 @@ function App() {
             element={
               isLoggedIn ? (
                 <Dashboard onLogout={handleLogout} />
-              ) : (
-                <LoginPage onLogin={handleLogin} />
-              )
-            }
-          />
-          <Route
-            path="/shipping-transfers"
-            element={
-              isLoggedIn ? (
-                <ShippingTransfers />
               ) : (
                 <LoginPage onLogin={handleLogin} />
               )

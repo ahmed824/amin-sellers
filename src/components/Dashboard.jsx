@@ -189,14 +189,6 @@ function Dashboard({ onLogout, isModal = false }) {
                 {!isModal && (
                   <List className="dashboard-lists">
                     <ListItem disablePadding>
-                      <ListItemButton component={Link} to="/shipping-transfers">
-                        <ListItemText
-                          sx={{ color: "#fff" }}
-                          primary="الشحن والتحويلات"
-                        />
-                      </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
                       <ListItemButton component={Link} to="/token-balance">
                         <ListItemText
                           sx={{ color: "#fff" }}
