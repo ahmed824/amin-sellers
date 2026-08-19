@@ -31,7 +31,7 @@ const queryClient = new QueryClient();
 
 const pages = [
   {
-    label: "المنتجات المتعددة",
+    label: "التصنيفات",
     icon: <ShoppingCartIcon sx={{ color: "#fff" }} />,
     component: <CategoriesPage />,
     path: "/",
