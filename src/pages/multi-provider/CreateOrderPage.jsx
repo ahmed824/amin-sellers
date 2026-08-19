@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Alert,
@@ -72,8 +72,8 @@ const extractRecipient = (data) => {
   return JSON.stringify(normalizeDeliveryData(data || {})).toLowerCase();
 };
 
-const buildDuplicateOrderKey = ({ productId, quantity, deliveryData }) =>
-  [productId, quantity, extractRecipient(deliveryData)].join("|");
+const buildDuplicateOrderKey = ({ sellerId, productId, deliveryData }) =>
+  [sellerId, productId, extractRecipient(deliveryData)].join("|");
 
 const getLastDuplicateOrder = () => {
   try {
@@ -149,6 +149,7 @@ function CreateOrderPage() {
   );
   const { data: sellerProfile } = useSellerProfile();
   const createOrderMutation = useCreateOrder();
+  const submissionInFlightRef = useRef(false);
 
   const [selectedVariantId, setSelectedVariantId] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -394,12 +395,14 @@ function CreateOrderPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (submissionInFlightRef.current) return;
     if (!validateForm()) return;
+    submissionInFlightRef.current = true;
 
     const normalizedDeliveryData = normalizeDeliveryData(deliveryData);
     const duplicateKey = buildDuplicateOrderKey({
+      sellerId: sellerProfile?.id,
       productId: parseInt(selectedVariant.id, 10),
-      quantity: parseInt(quantity, 10),
       deliveryData: normalizedDeliveryData,
     });
     const now = Date.now();
@@ -412,6 +415,7 @@ function CreateOrderPage() {
         ...prev,
         form: "لا يمكن إرسال نفس الطلب لنفس اللاعب خلال أقل من دقيقة.",
       }));
+      submissionInFlightRef.current = false;
       return;
     }
 
@@ -428,6 +432,8 @@ function CreateOrderPage() {
       setTimeout(() => navigate("/multi-provider/orders"), 1500);
     } catch {
       // The mutation hook shows the toast.
+    } finally {
+      submissionInFlightRef.current = false;
     }
   };
 
