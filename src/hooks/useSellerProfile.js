@@ -35,8 +35,11 @@ const fetchSellerProfile = async () => {
       name: data.data.name,
       image: data.data.image || "/images/default-avatar.png",
       wallet: {
-        balance: data.data.wallet?.balance || 0,
-        currency: data.data.wallet?.currency || "USD"
+        balance: data.data.wallet?.balance ?? 0,
+        available_balance:
+          data.data.wallet?.available_balance ?? data.data.wallet?.balance ?? 0,
+        held_balance: data.data.wallet?.held_balance ?? 0,
+        currency: data.data.wallet?.currency || "USD",
       },
       pricing: {
         currency: data.data.pricing?.currency || "USD",
@@ -59,6 +62,7 @@ export const useSellerProfile = () => {
   return useQuery({
     queryKey: ["sellerProfile"],
     queryFn: fetchSellerProfile,
+    refetchInterval: 30 * 1000,
     retry: (failureCount, error) => {
       if (error.message.includes("رمز التوثيق غير صالح")) {
         navigate("/login");

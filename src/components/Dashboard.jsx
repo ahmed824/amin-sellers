@@ -97,10 +97,17 @@ function Dashboard({ onLogout, isModal = false }) {
                 >
                   رصيد الحساب
                 </Typography>
-                <Typography variant="body1" color="#bbb" mb={2}>
-                  رصيد المحفظة:{" "}
+                <Typography variant="body1" color="#bbb" mb={1}>
+                  الرصيد المتاح:{" "}
                   <span style={{ color: "#00e676", fontWeight: 700 }}>
-                    {Number(profile?.wallet?.balance).toLocaleString()}{" "}
+                    {Number(profile?.wallet?.available_balance).toLocaleString()}{" "}
+                    {profile?.wallet?.currency}
+                  </span>
+                </Typography>
+                <Typography variant="body1" color="#bbb" mb={2}>
+                  الرصيد المعلّق (Hold):{" "}
+                  <span style={{ color: "#ffb74d", fontWeight: 700 }}>
+                    {Number(profile?.wallet?.held_balance).toLocaleString()}{" "}
                     {profile?.wallet?.currency}
                   </span>
                 </Typography>

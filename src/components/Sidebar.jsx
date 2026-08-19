@@ -96,13 +96,20 @@ function Sidebar({ tab, setTab, pages, handleLogout, userName }) {
               >
                 {userName}
               </Typography>
-            <Typography
-              variant="body2"
-              sx={{ color: "#00e676", fontWeight: 700 }}
-              align="center"
-            >
-              {Number(profile?.wallet?.balance).toLocaleString()} {profile?.wallet?.currency}
-            </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: "#00e676", fontWeight: 700 }}
+                align="center"
+              >
+                المتاح: {Number(profile?.wallet?.available_balance).toLocaleString()} {profile?.wallet?.currency}
+              </Typography>
+              <Typography
+                variant="caption"
+                sx={{ color: "#ffb74d", fontWeight: 700 }}
+                align="center"
+              >
+                المعلّق: {Number(profile?.wallet?.held_balance).toLocaleString()} {profile?.wallet?.currency}
+              </Typography>
             </Box>
 
             <Divider />

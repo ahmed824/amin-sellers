@@ -434,7 +434,10 @@ function CreateOrderPage() {
   const duplicateRemainingSeconds = duplicateBlockUntil
     ? Math.max(0, Math.ceil((duplicateBlockUntil - nowTick) / 1000))
     : 0;
-  const walletBalance = Number(sellerProfile?.wallet?.balance || 0);
+  const availableWalletBalance = Number(
+    sellerProfile?.wallet?.available_balance ?? sellerProfile?.wallet?.balance ?? 0
+  );
+  const heldWalletBalance = Number(sellerProfile?.wallet?.held_balance ?? 0);
   const total = Number(calculateTotal());
 
   if (isLoading) {
@@ -788,11 +791,17 @@ function CreateOrderPage() {
 
             {sellerProfile && (
               <Alert
-                severity={walletBalance >= total ? "success" : "error"}
+                severity={availableWalletBalance >= total ? "success" : "error"}
                 sx={{ mb: 2 }}
               >
-                الرصيد المتاح: {formatMoney(walletBalance)}{" "}
-                {sellerProfile.wallet?.currency || "USD"}
+                <Typography variant="body2">
+                  الرصيد المتاح: {formatMoney(availableWalletBalance)}{" "}
+                  {sellerProfile.wallet?.currency || "USD"}
+                </Typography>
+                <Typography variant="body2">
+                  الرصيد المعلّق: {formatMoney(heldWalletBalance)}{" "}
+                  {sellerProfile.wallet?.currency || "USD"}
+                </Typography>
               </Alert>
             )}
 

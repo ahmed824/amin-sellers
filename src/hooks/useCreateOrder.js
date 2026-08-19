@@ -39,6 +39,7 @@ export const useCreateOrder = () => {
     onSuccess: (data) => {
       // Invalidate order history to refresh the list
       queryClient.invalidateQueries({ queryKey: ["multiProviderOrderHistory"] });
+      queryClient.invalidateQueries({ queryKey: ["sellerProfile"] });
       toast.success(data.message || "تم إنشاء الطلب بنجاح");
     },
     onError: (error) => {
