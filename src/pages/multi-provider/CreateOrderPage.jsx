@@ -213,8 +213,8 @@ function CreateOrderPage() {
     setDeliveryData(initialData);
     setErrors({});
 
-    setQuantity(isJawakerTokenProduct ? "" : minimumQuantity);
-  }, [selectedVariant, isJawakerTokenProduct, minimumQuantity]);
+    setQuantity("");
+  }, [selectedVariant]);
 
   useEffect(() => {
     if (!duplicateBlockUntil) return undefined;
@@ -580,13 +580,8 @@ function CreateOrderPage() {
                 onChange={(event) => {
                   const rawValue = event.target.value;
 
-                  if (isJawakerTokenProduct) {
-                    if (rawValue === "" || /^\d+$/.test(rawValue)) {
-                      setQuantity(rawValue);
-                    }
-                  } else {
-                    const value = parseInt(rawValue, 10) || 1;
-                    setQuantity(Math.max(minimumQuantity, value));
+                  if (rawValue === "" || /^\d+$/.test(rawValue)) {
+                    setQuantity(rawValue);
                   }
 
                   setErrors((prev) => {
