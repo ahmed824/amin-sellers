@@ -171,6 +171,11 @@ function CreateOrderPage() {
     [variants, selectedVariantId]
   );
   const isJawakerProduct = isJawakerVariant(selectedVariant);
+  const isJawakerTokenProduct =
+    isJawakerProduct && selectedVariant?.product_type === "amount";
+  const minimumQuantity = isJawakerTokenProduct
+    ? Math.max(10000, selectedVariant?.qty_constraints?.min || 1)
+    : selectedVariant?.qty_constraints?.min || 1;
   const extraRequiredFields = (selectedVariant?.required_data || []).filter(
     (field) => !(isJawakerProduct && isRecipientField(field))
   );
@@ -208,9 +213,8 @@ function CreateOrderPage() {
     setDeliveryData(initialData);
     setErrors({});
 
-    const min = selectedVariant.qty_constraints?.min || 1;
-    setQuantity(min);
-  }, [selectedVariant]);
+    setQuantity(isJawakerTokenProduct ? "" : minimumQuantity);
+  }, [selectedVariant, isJawakerTokenProduct, minimumQuantity]);
 
   useEffect(() => {
     if (!duplicateBlockUntil) return undefined;
@@ -335,7 +339,7 @@ function CreateOrderPage() {
   const quickAmounts = useMemo(() => {
     if (!selectedVariant) return [];
     const constraints = selectedVariant.qty_constraints || {};
-    const min = constraints.min || 1;
+    const min = minimumQuantity;
     const max = constraints.max;
 
     if (selectedVariant.product_type === "amount") {
@@ -347,7 +351,7 @@ function CreateOrderPage() {
     }
 
     return [1, 2, 3, 4, 5].filter((amount) => amount >= min && (!max || amount <= max));
-  }, [selectedVariant]);
+  }, [selectedVariant, minimumQuantity]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -358,15 +362,18 @@ function CreateOrderPage() {
 
     if (selectedVariant) {
       const constraints = selectedVariant.qty_constraints || {};
-      const min = constraints.min || 1;
+      const min = minimumQuantity;
       const max = constraints.max;
       const step = constraints.step || 1;
+      const numericQuantity = Number(quantity);
 
-      if (quantity < min) {
+      if (quantity === "" || !Number.isInteger(numericQuantity)) {
+        newErrors.quantity = "أدخل كمية صحيحة";
+      } else if (numericQuantity < min) {
         newErrors.quantity = `الكمية يجب أن تكون ${min} على الأقل`;
-      } else if (max && quantity > max) {
+      } else if (max && numericQuantity > max) {
         newErrors.quantity = `الكمية يجب ألا تتجاوز ${max}`;
-      } else if (step > 1 && (quantity - min) % step !== 0) {
+      } else if (step > 1 && (numericQuantity - min) % step !== 0) {
         newErrors.quantity = `الكمية يجب أن تكون بخطوات ${step} بدءاً من ${min}`;
       }
 
@@ -571,9 +578,17 @@ function CreateOrderPage() {
                 type="number"
                 value={quantity}
                 onChange={(event) => {
-                  const value = parseInt(event.target.value, 10) || 1;
-                  const min = selectedVariant.qty_constraints?.min || 1;
-                  setQuantity(Math.max(min, value));
+                  const rawValue = event.target.value;
+
+                  if (isJawakerTokenProduct) {
+                    if (rawValue === "" || /^\d+$/.test(rawValue)) {
+                      setQuantity(rawValue);
+                    }
+                  } else {
+                    const value = parseInt(rawValue, 10) || 1;
+                    setQuantity(Math.max(minimumQuantity, value));
+                  }
+
                   setErrors((prev) => {
                     const next = { ...prev };
                     delete next.quantity;
@@ -582,7 +597,7 @@ function CreateOrderPage() {
                   });
                 }}
                 inputProps={{
-                  min: selectedVariant.qty_constraints?.min || 1,
+                  min: minimumQuantity,
                   max: selectedVariant.qty_constraints?.max || undefined,
                   step: selectedVariant.qty_constraints?.step || 1,
                 }}
@@ -591,7 +606,7 @@ function CreateOrderPage() {
                   errors.quantity ||
                   (selectedVariant.product_type === "amount" &&
                   selectedVariant.qty_constraints
-                    ? `أدخل كمية بين ${selectedVariant.qty_constraints.min || 1} و ${
+                    ? `أدخل كمية بين ${minimumQuantity} و ${
                         selectedVariant.qty_constraints.max || "∞"
                       }`
                     : "اختر عدد الوحدات")
@@ -741,7 +756,7 @@ function CreateOrderPage() {
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography sx={{ color: "#aaa" }}>الكمية</Typography>
                 <Typography sx={{ fontWeight: 700 }}>
-                  {Number(quantity).toLocaleString()}
+                  {quantity === "" ? "-" : Number(quantity).toLocaleString()}
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
