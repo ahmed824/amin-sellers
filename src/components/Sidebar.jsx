@@ -14,14 +14,13 @@ import {
 } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import HistoryIcon from "@mui/icons-material/History";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate, useLocation } from "react-router-dom";
 import BottomNavItem from "./BottomNavItem";
 import DashboardModal from "./shared/DashboardModal";
 import InstallButton from "./InstallButton";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSellerProfile } from "../hooks/useSellerProfile";
 
 const drawerWidth = 220;
@@ -127,17 +126,6 @@ function Sidebar({ tab, setTab, pages, handleLogout, userName }) {
             <Divider sx={{ my: 2 }} />
 
             <List>
-              <ListItem disablePadding>
-                <ListItemButton
-                  selected={isMultiProviderActive && !isMultiProviderOrdersActive}
-                  onClick={() => navigate("/multi-provider")}
-                >
-                  <ListItemIcon sx={{ minWidth: "auto", mr: 1 }}>
-                    <ShoppingCartIcon sx={{ color: "#fff" }} />
-                  </ListItemIcon>
-                  <ListItemText primary="المنتجات المتعددة" />
-                </ListItemButton>
-              </ListItem>
               <ListItem disablePadding>
                 <ListItemButton
                   selected={isMultiProviderOrdersActive}

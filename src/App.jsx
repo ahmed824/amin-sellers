@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Routes,
+  Route,
+} from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Typography } from "@mui/material";
 
 import LoginPage from "./pages/LoginPage";
-import AcceleratorTransfers from "./pages/AcceleratorTransfers";
 import TokenHistory from "./pages/TokenHistory";
 import AcceleratorHistory from "./pages/AcceleratorHistory";
 import Dashboard from "./pages/Dashboard";
@@ -21,16 +25,16 @@ import { getAuthToken, removeAuthToken } from "./utils/token";
 
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import FlashOnIcon from "@mui/icons-material/FlashOn";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const queryClient = new QueryClient();
 
 const pages = [
   {
-    label: "تحويل المسرعات",
-    icon: <RocketLaunchIcon sx={{ color: "#fff" }} />,
-    component: <AcceleratorTransfers />,
-    path: "/accelerator-transfers",
+    label: "المنتجات المتعددة",
+    icon: <ShoppingCartIcon sx={{ color: "#fff" }} />,
+    component: <CategoriesPage />,
+    path: "/",
   },
   {
     label: "سجل تحويل التوكنز",
@@ -105,16 +109,6 @@ function App() {
             }
           />
           <Route
-            path="/accelerator-transfers"
-            element={
-              isLoggedIn ? (
-                <AcceleratorTransfers />
-              ) : (
-                <LoginPage onLogin={handleLogin} />
-              )
-            }
-          />
-          <Route
             path="/token-history"
             element={
               isLoggedIn ? (
@@ -157,22 +151,7 @@ function App() {
           {/* Multi-Provider Routes */}
           <Route
             path="/multi-provider"
-            element={
-              isLoggedIn ? (
-                <MainLayout
-                  tab={tab}
-                  setTab={setTab}
-                  pages={pages}
-                  handleLogout={handleLogout}
-                  handleOpenNotifications={handleOpenNotifications}
-                  title="الفئات"
-                >
-                  <CategoriesPage />
-                </MainLayout>
-              ) : (
-                <LoginPage onLogin={handleLogin} />
-              )
-            }
+            element={<Navigate to="/" replace />}
           />
           <Route
             path="/multi-provider/category/:categoryId"
