@@ -168,7 +168,7 @@ const JawakerOfferPurchase = ({
                   <Divider sx={{ my: 1 }} />
 
                   <Typography variant="h6" color="success.main" gutterBottom>
-                    {offer.seller_price.toLocaleString()} توكنز
+                    {Number(offer.tokens_amount || offer.seller_price).toLocaleString()} توكنز
                     {offer.seller_price_money
                       ? ` = ${offer.seller_price_money}${offer.currency ? ` ${offer.currency}` : ""}`
                       : ""}

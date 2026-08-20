@@ -37,6 +37,7 @@ const fetchJawakerOffers = async (page = 1) => {
       external_offer_id: offer.external_offer_id,
       description: offer.description,
       image: offer.image || null,
+      tokens_amount: offer.tokens_amount || offer.seller_price,
       seller_price: offer.seller_price,
       seller_price_money: offer.seller_price_money || null,
       currency: offer.currency || null,
