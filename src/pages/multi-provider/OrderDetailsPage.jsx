@@ -79,7 +79,7 @@ const formatDate = (dateString) => {
     const formattedTime = `${hours}:${minutes} ${ampm}`;
 
     return `${day} ${month} ${year} - ${formattedTime}`;
-  } catch (e) {
+  } catch {
     return "-";
   }
 };
@@ -347,16 +347,6 @@ function OrderDetailsPage() {
                     {formatDate(order.failed_at)}
                   </Typography>
                 </Box>
-              </Grid>
-            )}
-            {order.current_provider && (
-              <Grid item xs={12} md={4}>
-                <Typography variant="body2" sx={{ color: "#aaa", mb: 0.5 }}>
-                  المورد الحالي
-                </Typography>
-                <Typography variant="body1" sx={{ color: "#fff" }}>
-                  {order.current_provider?.name || "-"}
-                </Typography>
               </Grid>
             )}
             {order.attempts !== undefined && (

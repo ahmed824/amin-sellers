@@ -261,7 +261,7 @@ function OrderHistoryPage() {
             width: "100%",
           }}
         >
-          <Table stickyHeader sx={{ minWidth: 1200 }}>
+          <Table stickyHeader sx={{ minWidth: 1100 }}>
             <TableHead>
               <TableRow>
                 <TableCell
@@ -318,17 +318,6 @@ function OrderHistoryPage() {
                   }}
                 >
                   السعر الإجمالي
-                </TableCell>
-                <TableCell
-                  sx={{
-                    bgcolor: "#3d3d45",
-                    color: "#fff",
-                    fontWeight: 700,
-                    borderColor: "#555",
-                    textAlign: "right",
-                  }}
-                >
-                  المورد
                 </TableCell>
                 <TableCell
                   sx={{
@@ -402,7 +391,7 @@ function OrderHistoryPage() {
               {orders.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={12}
+                    colSpan={11}
                     sx={{
                       textAlign: "center",
                       color: "#fff",
@@ -443,9 +432,6 @@ function OrderHistoryPage() {
                       {order.total_price
                         ? parseFloat(order.total_price).toFixed(2)
                         : "0.00"}
-                    </TableCell>
-                    <TableCell sx={{ textAlign: "right" }}>
-                      {order.current_provider?.name || "-"}
                     </TableCell>
                     <TableCell sx={{ textAlign: "right" }}>
                       {order.delivery_method || "-"}

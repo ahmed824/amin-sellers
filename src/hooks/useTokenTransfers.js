@@ -40,7 +40,14 @@ const fetchTokenTransfers = async ({ page = 1, from, to, on, q }) => {
     amount: transfer.amount,
     type: typeLabel,
     type_raw: typeRaw,
-    status: transfer.status === "done" ? "Done" : "Failed",
+    status:
+      transfer.status === "done"
+        ? "Done"
+        : transfer.status === "failed"
+          ? "Failed"
+          : transfer.status === "processing"
+            ? "Processing"
+            : "Pending",
     date: new Date(transfer.created_at).toLocaleDateString("ar-EG", {
       year: "numeric",
       month: "short",

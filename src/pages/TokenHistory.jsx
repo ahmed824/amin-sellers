@@ -169,7 +169,7 @@ function TokenHistory() {
             autoHeight
             getRowHeight={() => 'auto'}
             getRowClassName={(params) =>
-              params.row.status === "failed" ? "Mui-error-row" : ""
+              params.row.status !== "Done" ? "active" : ""
             }
             sx={{
               bgcolor: "#2a2a34",
