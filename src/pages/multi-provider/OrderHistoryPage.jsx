@@ -419,7 +419,7 @@ function OrderHistoryPage() {
                       {order.order_number || "-"}
                     </TableCell>
                     <TableCell sx={{ textAlign: "right" }}>
-                      {order.product?.name || order.product_variant?.product?.name || "-"}
+                      {order.display_product_name || order.product?.name || order.product_variant?.product?.name || "-"}
                     </TableCell>
                     <TableCell sx={{ textAlign: "right" }}>
                       {order.product ? "-" : order.product_variant?.name || "-"}

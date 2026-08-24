@@ -44,6 +44,10 @@ function TokenHistory() {
   });
 
   const rows = data?.rows || [];
+  const summary = data?.summary || {
+    tokens_total: 0,
+    today_tokens_total: 0,
+  };
   const pagination = data?.pagination || {
     current_page: 1,
     last_page: 1,
@@ -107,6 +111,45 @@ function TokenHistory() {
             />
           }
         />
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" },
+            gap: 2,
+            mb: 2,
+          }}
+        >
+          <Box
+            sx={{
+              p: 2,
+              borderRadius: 2,
+              bgcolor: "#33323c",
+              border: "1px solid #464550",
+            }}
+          >
+            <Typography variant="body2" sx={{ color: "#bdbdc7" }}>
+              إجمالي التوكنز المحولة
+            </Typography>
+            <Typography variant="h5" sx={{ color: "#fff", fontWeight: 800, mt: 0.5 }}>
+              {summary.tokens_total.toLocaleString("ar-EG")}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              p: 2,
+              borderRadius: 2,
+              bgcolor: "#4a3d12",
+              border: "1px solid #75621d",
+            }}
+          >
+            <Typography variant="body2" sx={{ color: "#f1df9a" }}>
+              إجمالي توكنز اليوم
+            </Typography>
+            <Typography variant="h5" sx={{ color: "#ffd54f", fontWeight: 800, mt: 0.5 }}>
+              {summary.today_tokens_total.toLocaleString("ar-EG")}
+            </Typography>
+          </Box>
+        </Box>
         {/* Date Filter Inputs */}
         <Box
           sx={{

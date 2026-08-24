@@ -31,7 +31,7 @@ const fetchTokenTransfers = async ({ page = 1, from, to, on, q }) => {
   // Map API data to DataGrid rows
   const rows = data.data.data.map((transfer) => {
     const typeRaw = transfer.type || "normal";
-    const typeLabel = typeRaw === "offer" ? "عرض" : "توكن";
+    const typeLabel = typeRaw === "offer" ? "عرض جواكر" : "تحويل توكن";
     return ({
     id: transfer.id,
     recipient_id: transfer.recipient_id,
@@ -61,6 +61,10 @@ const fetchTokenTransfers = async ({ page = 1, from, to, on, q }) => {
 
   return {
     rows,
+    summary: {
+      tokens_total: Number(data.summary?.tokens_total || 0),
+      today_tokens_total: Number(data.summary?.today_tokens_total || 0),
+    },
     pagination: {
       current_page: data.data.current_page,
       last_page: data.data.last_page,
